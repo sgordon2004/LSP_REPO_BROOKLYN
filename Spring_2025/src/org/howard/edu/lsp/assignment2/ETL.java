@@ -4,6 +4,8 @@ package org.howard.edu.lsp.assignment2;
 import java.io.BufferedReader; 
 import java.io.FileReader; 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +36,10 @@ public class ETL {
 		// Instantiating ETL class
 		ETL processor = new ETL();
 		processor.reader(relativePath);
-		processor.transformer(processor.dataList);
+		List<Map<String, String>> data = processor.transformer(processor.dataList);
+		for (int i = 0; i < data.size(); i++) {
+			System.out.print(data.get(i) + "\n");
+		}
 	}
 	// EXTRACT
 	// Method to read a .csv file
@@ -83,13 +88,27 @@ public class ETL {
 	}
 	
 	// Function to apply necessary changes
-	public void transformer(List<Map<String, String>> dataList) {
+	public List<Map<String, String>> transformer(List<Map<String, String>> dataList) {
 		// Apply 10% discount to products in "Electronics" category
 		for (int i = 0; i < dataList.size(); i++) { // iterates through each map in dataList
 			Map<String, String> map = dataList.get(i);
 			if (map.get("Category").equals("Electronics")) {
-				System.out.print(map + "\n");
+				double originalPrice = Double.parseDouble(map.get("Price"));
+				System.out.print("Original Price: " + Double.toString(originalPrice) + "\n");
+				double discountedPrice = originalPrice - (originalPrice * .1); // Apply 10% discount
+//				System.out.print("Discounted Price: " + Double.toString(discountedPrice) + "\n");
+				BigDecimal roundedPrice = new BigDecimal(discountedPrice).setScale(2, RoundingMode.HALF_UP); // Rounding to nearest 100th (BigDecimal is more precise for rounding
+//				System.out.print("Disc. Price * 100: " + Double.toString(discountedPrice * 100.0) + "\n");
+//				System.out.print("Rounded Disc. Price: " + Double.toString(Math.round(discountedPrice * 100.0)) + "\n");
+//				System.out.print("Rounded Price / 100: " + Double.toString(Math.round(discountedPrice * 100.0) / 100.00 ) + "\n");
+				System.out.print("Discounted Price: " + roundedPrice + "\n");
+				map.put("Price", roundedPrice.toString()); // Changing price in map
+				// Changes Electronics > $500 to Premium Electronics
+				if (roundedPrice.doubleValue() > 500) { 
+					map.put("Category", "Premium Electronics");
+				}
 			}
 		}
+		return dataList;
 	}
 }

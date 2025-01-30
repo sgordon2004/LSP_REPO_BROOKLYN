@@ -27,7 +27,7 @@ import java.util.List;
  */
 
 public class ETL {
-	List<Map<String, String>> dataList = new ArrayList<>(); // instantiating list to hold all maps
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
@@ -41,6 +41,8 @@ public class ETL {
 			System.out.print(data.get(i) + "\n");
 		}
 	}
+	
+	List<Map<String, String>> dataList = new ArrayList<>(); // instantiating list to hold all maps
 	// EXTRACT
 	// Method to read a .csv file
 	public void reader(String fileName) {
@@ -92,23 +94,47 @@ public class ETL {
 		// Apply 10% discount to products in "Electronics" category
 		for (int i = 0; i < dataList.size(); i++) { // iterates through each map in dataList
 			Map<String, String> map = dataList.get(i);
-			if (map.get("Category").equals("Electronics")) {
-				double originalPrice = Double.parseDouble(map.get("Price"));
-				System.out.print("Original Price: " + Double.toString(originalPrice) + "\n");
-				double discountedPrice = originalPrice - (originalPrice * .1); // Apply 10% discount
-//				System.out.print("Discounted Price: " + Double.toString(discountedPrice) + "\n");
-				BigDecimal roundedPrice = new BigDecimal(discountedPrice).setScale(2, RoundingMode.HALF_UP); // Rounding to nearest 100th (BigDecimal is more precise for rounding
-//				System.out.print("Disc. Price * 100: " + Double.toString(discountedPrice * 100.0) + "\n");
-//				System.out.print("Rounded Disc. Price: " + Double.toString(Math.round(discountedPrice * 100.0)) + "\n");
-//				System.out.print("Rounded Price / 100: " + Double.toString(Math.round(discountedPrice * 100.0) / 100.00 ) + "\n");
-				System.out.print("Discounted Price: " + roundedPrice + "\n");
-				map.put("Price", roundedPrice.toString()); // Changing price in map
-				// Changes Electronics > $500 to Premium Electronics
-				if (roundedPrice.doubleValue() > 500) { 
-					map.put("Category", "Premium Electronics");
-				}
-			}
+			electronicsTransformer(map);
+			caseChanger(map);
 		}
 		return dataList;
 	}
-}
+	
+	/***
+	 * Function to apply 10% discount to Electronics and 
+	 * change category of those over $500.
+	 * @param map (a map of a single .csv line)
+	 * @return map (new map of input .csv line with updated price/category)
+	 */
+	public Map<String, String> electronicsTransformer(Map<String, String> map) {
+		if (map.get("Category").equals("Electronics")) {
+			double originalPrice = Double.parseDouble(map.get("Price"));
+			System.out.print("Original Price: " + Double.toString(originalPrice) + "\n");
+			double discountedPrice = originalPrice - (originalPrice * .1); // Apply 10% discount
+			BigDecimal roundedPrice = new BigDecimal(discountedPrice).setScale(2, RoundingMode.HALF_UP); // Rounding to nearest 100th (BigDecimal is more precise for rounding
+			System.out.print("Discounted Price: " + roundedPrice + "\n");
+			map.put("Price", roundedPrice.toString()); // Changing price in map
+			
+			// Changes Electronics > $500 to Premium Electronics
+			if (roundedPrice.doubleValue() > 500) { 
+				map.put("Category", "Premium Electronics");
+			}
+		}
+		return map;
+	}
+	
+
+	/***
+	 * Function to convert all product names to upper case.
+	 * @param map (a map of a single .csv line)
+	 * @return map (new map with upper case product names)
+	 */
+	public Map<String, String> caseChanger(Map<String, String> map) {
+		String lowerName = map.get("Name"); // store original lower case name
+		String upperName = lowerName.toUpperCase(); // covert name to upper case
+		map.put("Name", upperName); // update map
+		
+		return map;
+	}
+	}
+

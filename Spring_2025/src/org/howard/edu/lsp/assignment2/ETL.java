@@ -43,6 +43,7 @@ public class ETL {
 	}
 	
 	List<Map<String, String>> dataList = new ArrayList<>(); // instantiating list to hold all maps
+	
 	// EXTRACT
 	// Method to read a .csv file
 	public void reader(String fileName) {
@@ -96,6 +97,7 @@ public class ETL {
 			Map<String, String> map = dataList.get(i);
 			electronicsTransformer(map);
 			caseChanger(map);
+			priceRanger(map);
 		}
 		return dataList;
 	}
@@ -136,5 +138,33 @@ public class ETL {
 		
 		return map;
 	}
+	
+	/***
+	 * Function to assign a price range to all items.
+	 * Low: 0 - 10
+	 * Med: 10.01 - 100
+	 * High: 100.01 - 500
+	 * Prem: 500.01+
+	 * @param map (a map of a single .csv line)
+	 * @return map (new map with updated PriceRange field)
+	 */
+	public Map<String, String> priceRanger(Map<String, String> map) {
+		// Check price
+		String stringPrice = map.get("Price");
+		Double doublePrice = Double.parseDouble(stringPrice);
+		// Price Range
+		if (doublePrice < 10.01) {
+			map.put("PriceRange", "Low");
+		} else if (doublePrice >= 10.01 && doublePrice < 100.01) {
+			map.put("PriceRange", "Medium");
+		} else if (doublePrice >= 100.01 && doublePrice < 500.01) {
+			map.put("PriceRange", "High");
+		} else {
+			map.put("PriceRange", "Premium");
+		}
+		
+		return map;
+	}
+	
 	}
 

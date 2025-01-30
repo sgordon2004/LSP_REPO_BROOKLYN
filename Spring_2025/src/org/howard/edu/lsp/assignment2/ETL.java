@@ -34,8 +34,13 @@ public class ETL {
 	public void reader(String fileName) {
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
 			String line;
-			while ((line = bufferedReader.readLine()) != null) { // Reads line by line until there are no more lines
-				System.out.println(line);
+			while ((line = bufferedReader.readLine()) != null) { // Reads line by line until EOF
+				if (line.isEmpty()) { // checks if line is empty
+					continue; // if a line is empty, it is not printed
+				} else {
+					System.out.println(line);
+				}
+				
 			}
 		} catch (IOException e) { // Catches Input/Output error
 			System.out.println("Error: " + e.getMessage()); // Prints detailed error message

@@ -1,15 +1,15 @@
 package org.howard.edu.lsp.assignment2;
 
 //Importing required classes 
-import java.io.BufferedReader; 
-import java.io.FileReader; 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -28,21 +28,27 @@ import java.util.List;
 
 public class ETL {
 	
+
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		
 		// Relative path to file
 		String relativePath = "data/products.csv";
+		String outputPath = "data/transformed_products.csv";
 		// Instantiating ETL class
 		ETL processor = new ETL();
 		processor.reader(relativePath);
 		List<Map<String, String>> data = processor.transformer(processor.dataList);
-		for (int i = 0; i < data.size(); i++) {
-			System.out.print(data.get(i) + "\n");
-		}
+//		for (int i = 0; i < data.size(); i++) {
+//			System.out.print(data.get(i) + "\n");
+//		}
+		processor.writeCSV(outputPath, data);
 	}
 	
-	List<Map<String, String>> dataList = new ArrayList<>(); // instantiating list to hold all maps
+	// Save .csv header data
+	private String[] headers;
+	// Instantiating list to hold all maps
+	List<Map<String, String>> dataList = new ArrayList<>();
+	
 	
 	// EXTRACT
 	// Method to read a .csv file
@@ -50,7 +56,6 @@ public class ETL {
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
 			String line;
 			int counter = 0;
-			String[] headers = null; // array to store header values
 			while ((line = bufferedReader.readLine()) != null) { // Reads line by line until EOF
 				if (line.isEmpty()) { // checks if line is empty
 					continue; // if a line is empty, it is not printed
@@ -111,10 +116,10 @@ public class ETL {
 	public Map<String, String> electronicsTransformer(Map<String, String> map) {
 		if (map.get("Category").equals("Electronics")) {
 			double originalPrice = Double.parseDouble(map.get("Price"));
-			System.out.print("Original Price: " + Double.toString(originalPrice) + "\n");
+//			System.out.print("Original Price: " + Double.toString(originalPrice) + "\n");
 			double discountedPrice = originalPrice - (originalPrice * .1); // Apply 10% discount
 			BigDecimal roundedPrice = new BigDecimal(discountedPrice).setScale(2, RoundingMode.HALF_UP); // Rounding to nearest 100th (BigDecimal is more precise for rounding
-			System.out.print("Discounted Price: " + roundedPrice + "\n");
+//			System.out.print("Discounted Price: " + roundedPrice + "\n");
 			map.put("Price", roundedPrice.toString()); // Changing price in map
 			
 			// Changes Electronics > $500 to Premium Electronics
@@ -165,6 +170,33 @@ public class ETL {
 		
 		return map;
 	}
+	
+	// LOAD
+	
+	
+	public void writeCSV(String filePath, List<Map<String, String>> dataList) {
+		// Write header row
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+			if (headers != null) {
+				writer.write(String.join(",", headers));
+				writer.newLine();
+			}
+			
+			for (Map<String, String> row : dataList ) {
+				List<String> values = new ArrayList<>();
+				for (String header : headers) {
+					values.add(row.getOrDefault(header, ""));
+				}
+				writer.write(String.join(",", values));
+				writer.newLine();
+			}
+			
+			System.out.println("CSV file written successfully!");
+		} catch (IOException e) {
+			System.out.println("Error writing CSV file: " + e.getMessage());
+		}
+	}
+	
 	
 	}
 

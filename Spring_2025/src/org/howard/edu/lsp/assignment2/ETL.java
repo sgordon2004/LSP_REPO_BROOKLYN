@@ -14,21 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 
-/**
- * Requirements:
- * 1. Read .csv file from a relative directory named data located in
-      the project root folder.
-      
-  	Formatting Help:
-  	Class: ETLProcessor ✅ (PascalCase)
-	Method: readCsvFile() ✅ (camelCase)
-	Variable: filePath ✅ (camelCase)
-	Constant: DEFAULT_DISCOUNT ✅ (UPPER_SNAKE_CASE)
- */
-
 public class ETL {
 	
-
 	public static void main(String[] args) {
 		
 		// Relative path to file
@@ -36,50 +23,54 @@ public class ETL {
 		String outputPath = "data/transformed_products.csv";
 		// Instantiating ETL class
 		ETL processor = new ETL();
-		processor.reader(relativePath);
-		List<Map<String, String>> data = processor.transformer(processor.dataList);
-//		for (int i = 0; i < data.size(); i++) {
-//			System.out.print(data.get(i) + "\n");
-//		}
-		processor.writeCSV(outputPath, data);
+		processor.reader(relativePath); // extraction: calling reader to extract file
+		List<Map<String, String>> data = processor.transformer(processor.dataList); // transformation: creating a formatted list of maps to store data from .csv file
+		processor.writeCSV(outputPath, data); // loading: calling writer to write new .csv file to data directory
 	}
 	
-	// Save .csv header data
+	// List of strings that will hold the header of the .csv file
 	private String[] headers;
-	// Instantiating list to hold all maps
+	// Instantiating a list to hold all maps (each map is a row of the .csv file)
 	List<Map<String, String>> dataList = new ArrayList<>();
 	
 	
 	// EXTRACT
-	// Method to read a .csv file
+	
+	/***
+	 * Function to read .csv file and convert each row to a map for
+	 * easy storage within a list.
+	 * @param fileName (the .csv file to be read)
+	 */
 	public void reader(String fileName) {
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
 			String line;
-			int counter = 0;
+			boolean isFirstLine = true;
 			while ((line = bufferedReader.readLine()) != null) { // Reads line by line until EOF
 				if (line.isEmpty()) { // checks if line is empty
 					continue; // if a line is empty, it is not printed
-				} else {
-					if (counter == 0) { // Saves first line (headers) to list of header values
-						headers = line.split(",");
-					} else {
-						mapToList(lineToMap(line, headers)); // converts the .csv line to a map and then adds that map to an array
-					}
 				}
-				counter = 1;
+				if (isFirstLine) { // runs on first line only to save header values
+					headers = line.split(",");
+					isFirstLine = false;
+				} else { // runs on every other line of .csv besides the first
+					mapToList(lineToMap(line, headers)); // converts the .csv line to a map and then adds that map to an array
+				}
 			}
-//			System.out.print(dataList.size()  + "\n");
-//			for (int i = 0; i < dataList.size(); i++) {
-//				System.out.print(dataList.get(i) + "\n");
-//			}
+		}
 			
-		} catch (IOException e) { // Catches Input/Output error
-			System.out.println("Error: " + e.getMessage()); // Prints detailed error message
+		catch (IOException e) { // Catches Input/Output error
+			e.printStackTrace(); // Prints detailed error message
 		}
 	}
 	
 	// TRANSFORM
-	// function to convert each line to a map
+	
+	/***
+	 * Function to convert each line of the .csv to a map, where the header is k and the corresponding value under said header is v)
+	 * @param line (the line of the .csv to be converted)
+	 * @param headers (a list of strings of the .csv header fields)
+	 * @return rowMap (a map of the .csv line)
+	 */
 	public Map<String, String> lineToMap(String line, String[] headers) { // function returning a hashMap from csv lines
 		String[] values = line.split(","); // Splits .csv lines by commas
 		Map<String, String> rowMap = new LinkedHashMap<>(); // Instantiating a new LinkedHashMap to store data
@@ -90,12 +81,19 @@ public class ETL {
 		return rowMap;
 	}
 	
-	// function to add each map to a list
+	/***
+	 * Function to add each map of a row of the .csv to a list for easy navigation.
+	 * @param map (the map of the row of the .csv file)
+	 */
 	public void mapToList(Map<String, String> map) {
 		dataList.add(map);
 	}
 	
-	// Function to apply necessary changes
+	/***
+	 * Function to perform all required transformations at once.
+	 * @param dataList (the list containing the maps of all lines of the original .csv)
+	 * @return dataList (the new list after all the transformations)
+	 */
 	public List<Map<String, String>> transformer(List<Map<String, String>> dataList) {
 		// Apply 10% discount to products in "Electronics" category
 		for (int i = 0; i < dataList.size(); i++) { // iterates through each map in dataList
@@ -116,10 +114,8 @@ public class ETL {
 	public Map<String, String> electronicsTransformer(Map<String, String> map) {
 		if (map.get("Category").equals("Electronics")) {
 			double originalPrice = Double.parseDouble(map.get("Price"));
-//			System.out.print("Original Price: " + Double.toString(originalPrice) + "\n");
 			double discountedPrice = originalPrice - (originalPrice * .1); // Apply 10% discount
 			BigDecimal roundedPrice = new BigDecimal(discountedPrice).setScale(2, RoundingMode.HALF_UP); // Rounding to nearest 100th (BigDecimal is more precise for rounding
-//			System.out.print("Discounted Price: " + roundedPrice + "\n");
 			map.put("Price", roundedPrice.toString()); // Changing price in map
 			
 			// Changes Electronics > $500 to Premium Electronics
@@ -173,16 +169,20 @@ public class ETL {
 	
 	// LOAD
 	
-	
+	/***
+	 * Function to write transformed .csv file to the data directory.
+	 * @param filePath (the output directory to store new .csv in)
+	 * @param dataList (the list containing the maps of all lines of the original .csv)
+	 */
 	public void writeCSV(String filePath, List<Map<String, String>> dataList) {
 		// Write header row
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-			if (headers != null) {
+			if (headers != null) { // create the header line of new .csv
 				writer.write(String.join(",", headers));
 				writer.newLine();
 			}
 			
-			for (Map<String, String> row : dataList ) {
+			for (Map<String, String> row : dataList ) { // for each row in the dataList
 				List<String> values = new ArrayList<>();
 				for (String header : headers) {
 					values.add(row.getOrDefault(header, ""));
@@ -190,13 +190,11 @@ public class ETL {
 				writer.write(String.join(",", values));
 				writer.newLine();
 			}
-			
 			System.out.println("CSV file written successfully!");
-		} catch (IOException e) {
-			System.out.println("Error writing CSV file: " + e.getMessage());
+		}
+		catch (IOException e) {
+			e.printStackTrace(); // prints detailed error message
 		}
 	}
-	
-	
-	}
+}
 

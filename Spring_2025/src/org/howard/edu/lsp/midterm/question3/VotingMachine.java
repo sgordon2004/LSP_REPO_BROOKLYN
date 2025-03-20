@@ -39,5 +39,23 @@ public class VotingMachine {
         }
         return false; // Candidate does not exist
     }
+    /**
+     * This method returns the candidate with the highest
+     * number of votes, which means they won the election.
+     * @return String		tells you which candidate won
+     */
+    public String getWinner() {
+    	String winner = null;
+        int maxVotes = -1;
+        
+        for (Map.Entry<String, Integer> entry : votes.entrySet()) {
+            if (entry.getValue() > maxVotes) {
+                maxVotes = entry.getValue();
+                winner = entry.getKey();
+            }
+        }
+
+        return winner + " WINS with " + maxVotes + " votes!!";
+    }
 
 }

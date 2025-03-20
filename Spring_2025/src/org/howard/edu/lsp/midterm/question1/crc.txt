@@ -46,3 +46,15 @@ Part 2: Define Responsibilities
 	a. addBooktoCollection -> adds a new book to the collection
 	b. removeBookFromCollection -> removes a book from the collection
 ---------
+Part 3: Identify Collaborators
+1. Collection collaborators
+	a. Book -> collaborates with Book to manage its availability
+	b. Member -> collaborates with Member to keep track of WHO is borrowing the Book
+	c. Librarian -> collaborates with Librarian to allow Librarian to make changes to the Collection
+2. Book collaborators
+	a. Collection -> collaborates with Collection to determine whether it is currently checked our or available
+3. Member collaborators
+	a. Book -> collaborates with Book to check it out or return it
+	b. Collection -> collaborates with Collection to remove the book from (when borrowing) or add the book back to (when returning) the Collection
+4. Librarian collaborators
+	a. Collection -> collaborates with Collection to add a new book to or remove an outdated/lost Book from the Collection

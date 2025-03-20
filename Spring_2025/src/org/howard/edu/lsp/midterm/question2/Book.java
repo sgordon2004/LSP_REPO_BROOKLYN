@@ -78,4 +78,14 @@ public class Book {
 		Book otherBook = (Book) obj; // Typecasting obj to Book
 		return this.ISBN.equals(otherBook.ISBN) && this.author.equals(otherBook.author);
 	}
+	/**
+	 * This method overrides the implicit toString method
+	 * in order to return a meaningful string representation
+	 * of a Book object.
+	 */
+	@Override
+	public String toString() {
+		return "Title: " + title + ", Author: " + author + ", ISBN: " + ISBN + ", Year Published: " + yearPublished;
+	}
 }
+

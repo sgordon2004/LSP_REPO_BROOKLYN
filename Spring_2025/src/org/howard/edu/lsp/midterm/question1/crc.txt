@@ -7,3 +7,25 @@ Book
 Member
 - borrowing (max 3)
 - return book
+
+		
+Librarian
+- add book to collection
+- remove books
+
+Collection
+- 
+
+Part 1: Identify Classes
+1. Collection
+	- This class is needed to serve as the list of all books the libary owns,
+	  regardless of whether that book is currently being borrowed or not.
+2. Book
+	- This class is needed to serve as a representation of a book, with a
+	  title, author, ISBN, and availability status.
+3. Member
+	- This class is needed to serve as a representation of a libary member,
+	  who can borrow and return books.
+4. Librarian
+	- This class is needed to serve as a representation of a librarian, who
+	  has the administrative power to add and remove books from the Collection.

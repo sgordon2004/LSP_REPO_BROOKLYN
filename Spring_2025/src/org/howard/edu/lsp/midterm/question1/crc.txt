@@ -1,0 +1,9 @@
+Book
+- title
+- author
+- ISBN
+- availability status
+
+Member
+- borrowing (max 3)
+- return book

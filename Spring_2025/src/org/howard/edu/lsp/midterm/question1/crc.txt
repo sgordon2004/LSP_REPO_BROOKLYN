@@ -29,3 +29,20 @@ Part 1: Identify Classes
 4. Librarian
 	- This class is needed to serve as a representation of a librarian, who
 	  has the administrative power to add and remove books from the Collection.
+--------
+Part 2: Define Responsibilities
+1. Collection
+	a. markBookAsBorrowed -> flag a book as currently being borrowed
+	b. markBookAsReturned -> flag a previously borrowed book as returned and allow it to be borrowed again
+2. Book
+	
+	a. maintainBookDetails -> tracks/maintains the book's author, ISBN, and title
+	b. checkIfAvailable -> checks if the book is available to be checked out or already being borrowed
+3. Member
+	a. countBorrowedBooks -> counts the number of books a member is borrowing to ensure it stays at or below the 3 book maximum
+	b. borrowBook -> borrows a book from the collection
+	c. returnBook -> returns a book the member was borrowing back to the collection
+4. Librarian
+	a. addBooktoCollection -> adds a new book to the collection
+	b. removeBookFromCollection -> removes a book from the collection
+---------

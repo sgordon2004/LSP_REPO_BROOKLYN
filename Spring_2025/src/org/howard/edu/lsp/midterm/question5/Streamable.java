@@ -19,7 +19,7 @@ public abstract class Streamable {
 	  * this method plays the media.
 	  */
 	 public void play() {
-	     System.out.println("Streaming " + getType() + ": \"" + title + "\" by " + creator);
+	     System.out.println("Playing " + getType() + ": \"" + title + "\" by " + creator);
 	 }
 	 /**
 	  * this method pauses the media.

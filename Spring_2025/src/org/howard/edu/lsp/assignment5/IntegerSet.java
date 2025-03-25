@@ -70,8 +70,8 @@ public class IntegerSet {
 		int largest = 0;
 		
 		for (int i = 0; i < length(); i++) {
-			if (i > largest) {
-				largest = i;
+			if (set.get(i) > largest) {
+				largest = set.get(i);
 			}
 		}
 		
@@ -85,8 +85,8 @@ public class IntegerSet {
 		double smallest = inf; // infinitely large place holder
 		
 		for (int i = 0; i < length(); i++) {
-			if (i < smallest) {
-				smallest = i;
+			if (set.get(i) < smallest) {
+				smallest = set.get(i);
 			}
 		}
 		

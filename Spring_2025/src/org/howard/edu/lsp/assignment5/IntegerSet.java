@@ -36,7 +36,27 @@ public class IntegerSet {
 	*/
 	@Override 
 	public boolean equals(Object o) {
-		return false;
+		if (o == null || !(o instanceof IntegerSet)) { // returns false if set is null or not an IntegerSet
+			return false;
+		}
+		if (o == this) { // if o is the same object as this they are obviously equal
+			return true;
+		}
+		
+		IntegerSet set = (IntegerSet) o; // cast o to integer set
+		
+		if (set.set.size() != this.set.size()) { // if the two sets are not the same length they are not equal (since there are no dupes_
+			return false;
+		}
+		
+	
+		// compare the elements
+		
+		if (set.set.containsAll(this.set) && this.set.containsAll(set.set)) {
+			return true; // returns false on first encounter with integer that is not in both sets
+		}
+	return false;
+		
 	}
 	
 	// Returns true if the set contains the value, otherwise false. 5 pts.
@@ -53,9 +73,6 @@ public class IntegerSet {
 			if (i > largest) {
 				largest = i;
 			}
-			else {
-				continue;
-			}
 		}
 		
 		return largest;
@@ -70,9 +87,6 @@ public class IntegerSet {
 		for (int i = 0; i < length(); i++) {
 			if (i < smallest) {
 				smallest = i;
-			}
-			else {
-				continue;
 			}
 		}
 		
@@ -107,35 +121,46 @@ public class IntegerSet {
 	
 	// Set union. 11 pts.
 	public void union(IntegerSet intSetb) {
-		List<Integer> union = new ArrayList<Integer>(); // stores union of the two sets
-		// add original set to union set
-		union.addAll(set);
-		// add input set to union set
-		union.addAll(intSetb.set);
+		for (Integer item : intSetb.set) {
+		    if (!this.set.contains(item)) { // avoids adding duplicates
+		        this.set.add(item);
+		    }
+		}
 	}
 	
 	// Set intersection, all elements in s1 and s2. 12 pts.
 	public void intersect(IntegerSet intSetb) {
-		
+		// if the sets are equal, either set is the intersection of both
+		if (!this.equals(intSetb)) {
+			this.set.retainAll(intSetb.set);
+		}
+		// else: sets are already equal so there is no need to change anything
 	}
 	
 	// Set difference, i.e., s1 –s2. 12 pts.
-	public void diff(IntegerSet intSetb) { // set difference, i.e. s1 - s2
-		
+	public void diff(IntegerSet intSetb) {
+		this.set.removeAll(intSetb.set); // predefined Java method to remove all elements in input from set calling it
 	}
 	
 	// Set complement, all elements not in s1. 11 pts.
 	public void complement(IntegerSet intSetb) {
-		
+		List<Integer> result = new ArrayList<>(intSetb.set);
+	    result.removeAll(this.set);
+	    this.set = result;
 	}
 	// Returns true if the set is empty, false otherwise. 5 pts.
 	boolean isEmpty() {
+		if (length() == 0) {
+			return true;
+		}
+		
 		return false;
-	};
-	
-	// Return String representation of your set. This overrides the equal method from
-	// the Object class. 5 pts.
-	public String toString() {
-		return null;
-	} // return String representation of your set
 	}
+	
+	// Return String representation of your set. This overrides the toString method from
+	// the Object class. 5 pts.
+	@Override
+	public String toString() {
+		return set.toString();
+	}
+}

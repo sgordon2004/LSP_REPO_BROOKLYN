@@ -86,11 +86,18 @@ public class Driver {
 		// Testing complement() method
 		set1.complement(set2);
 		System.out.println("Complement of set1 with respect to set2: " + set1.toString()); // Expected output: [4, 5]
+		System.out.println("-----------------------------------"); // Line Break
 		
 		// Testing clear() method
 		set1.clear();
 		System.out.println("Set 1 after clearing: " + set1.toString());
 		
+		// Testing remove() method
+		System.out.println("Current value of Set2: " + set2.toString());
+		set2.remove(3);
+		set2.remove(4);
+		set2.remove(5);
+		System.out.println("Current value of Set2 after removing elements: " + set2.toString());
 		
 		
 	}

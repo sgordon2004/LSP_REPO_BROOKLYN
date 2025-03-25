@@ -118,7 +118,7 @@ public class IntegerSet {
 			return;
 		}
 		else { // remove item from set
-			set.remove(item);
+			set.remove(Integer.valueOf(item));
 //			System.out.println(item + " removed from set.");
 		}
 	}

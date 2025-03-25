@@ -21,7 +21,7 @@ public class IntegerSet {
 	// Clears the internal representation of the set. 5 pts.
 	public void clear() {
 		set.clear(); // Using predefined Java method
-		System.out.println("Integer set cleared."); // Debugging message
+//		System.out.println("Integer set cleared."); // Debugging message
 	}
 	
 	// Returns the length of the set. 5 pts.
@@ -103,7 +103,7 @@ public class IntegerSet {
 		}
 		else { // add item to set
 			set.add(item);
-			System.out.println(item + " added to set."); // debugging message
+//			System.out.println(item + " added to set."); // debugging message
 		}
 	};
 	
@@ -115,7 +115,7 @@ public class IntegerSet {
 		}
 		else { // remove item from set
 			set.remove(item);
-			System.out.println(item + " removed from set.");
+//			System.out.println(item + " removed from set.");
 		}
 	}
 	

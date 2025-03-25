@@ -66,10 +66,13 @@ public class IntegerSet {
 	
 	// Returns the largest item in the set. 5 pts.
 	public int largest() {
+		if (this.isEmpty()) {
+	        throw new RuntimeException("Cannot determine largest element: the set is empty.");
+	    }
 		
-		int largest = 0;
+		int largest = set.get(0); // start with first element
 		
-		for (int i = 0; i < length(); i++) {
+		for (int i = 1; i < set.size(); i++) {
 			if (set.get(i) > largest) {
 				largest = set.get(i);
 			}
@@ -80,18 +83,19 @@ public class IntegerSet {
 	
 	// Returns the smallest item in the set. 5 pts.
 	public int smallest() {
+		if (this.isEmpty()) {
+	        throw new RuntimeException("Cannot determine smallest element: the set is empty.");
+	    }
 		
-		double inf = Double.POSITIVE_INFINITY;
-		double smallest = inf; // infinitely large place holder
+		int smallest = set.get(0); // start with first element
 		
-		for (int i = 0; i < length(); i++) {
+		for (int i = 1; i < set.size(); i++) {
 			if (set.get(i) < smallest) {
 				smallest = set.get(i);
 			}
 		}
 		
-	    int smallestInt = (int) smallest; // converting smallest from double to integer
-		return smallestInt;
+	    return smallest;
 		
 	}
 	

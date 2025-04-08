@@ -84,11 +84,11 @@ public class IntegerSet {
 	/**
 	 * Returns the largest element in the set.
 	 * @return the largest integer
-	 * @throws RuntimeException if the set is empty
+	 * @throws IntegerSetException if the set is empty
 	 */
-	public int largest() {
+	public int largest() throws IntegerSetException {
 		if (this.isEmpty()) {
-	        throw new RuntimeException("Cannot determine largest element: the set is empty.");
+	        throw new IntegerSetException("Cannot determine largest element: the set is empty.");
 	    }
 		
 		int largest = set.get(0); // start with first element
@@ -105,11 +105,11 @@ public class IntegerSet {
 	/**
 	 * Returns the smallest element in the set.
 	 * @return the smallest integer
-	 * @throws RuntimeException if the set is empty
+	 * @throws IntegerSetException if the set is empty
 	 */
-	public int smallest() {
+	public int smallest() throws IntegerSetException {
 		if (this.isEmpty()) {
-	        throw new RuntimeException("Cannot determine smallest element: the set is empty.");
+	        throw new IntegerSetException("Cannot determine smallest element: the set is empty.");
 	    }
 		
 		int smallest = set.get(0); // start with first element

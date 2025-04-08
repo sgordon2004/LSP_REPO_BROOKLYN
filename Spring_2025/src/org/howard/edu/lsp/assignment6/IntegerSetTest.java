@@ -105,33 +105,27 @@ public class IntegerSetTest {
     }
     
     @Test
-    @DisplayName("Test largest() with values")
-    public void testLargest() {
+    @DisplayName("Test largest() with values and exception")
+    public void testLargest() throws IntegerSetException {
     	set1.add(5);
     	set1.add(99);
     	set1.add(12);
     	assertEquals(99, set1.largest());
+    	
+    	set1.clear();
+    	assertThrows(IntegerSetException.class, () -> set1.largest());
     }
-    
+
     @Test
-    @DisplayName("Test largest() exception on an empty set")
-    public void testLargestException() {
-    	assertThrows(RuntimeException.class, () -> set1.largest());
-    }
-    
-    @Test
-    @DisplayName("Test smallest() with values")
-    public void testSmallest() {
+    @DisplayName("Test smallest() with values and exception")
+    public void testSmallest() throws IntegerSetException {
     	set1.add(7);
     	set1.add(-3);
     	set1.add(22);
     	assertEquals(-3, set1.smallest());
-    }
-    
-    @Test
-    @DisplayName("Test smallest() exception on an empty set")
-    public void testSmallestException() {
-    	assertThrows(RuntimeException.class, () -> set1.smallest());
+    	
+    	set1.clear();
+    	assertThrows(IntegerSetException.class, () -> set1.smallest());
     }
     
     @Test

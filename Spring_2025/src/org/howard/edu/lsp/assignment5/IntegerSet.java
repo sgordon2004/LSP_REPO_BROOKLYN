@@ -8,7 +8,7 @@ import java.util.List;
  * It supports standard set operations such as union, intersection, difference, and complement.
  * Internally, it uses an ArrayList to store values.
  *
- * @author Simon Armstrong
+ * @author Syrr Gordon
  */
 public class IntegerSet {
 	

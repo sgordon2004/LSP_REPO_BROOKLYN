@@ -213,6 +213,6 @@ public class IntegerSet {
 	 */
 	@Override
 	public String toString() {
-		return set.toString();
+		return set.toString(); 
 	}
 }
